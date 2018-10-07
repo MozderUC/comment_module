@@ -106,12 +106,29 @@ namespace comment_system_01.Controllers
         }
 
         
-        public string comments(int? id)
+        public string GetComments(int? id)
         {
             Movie movie = db.Movies.Find(id);
-            string str = JsonConvert.SerializeObject(movie.Comments.Select(p => new { p.CommentID, p.Context }));         
-
+            //Type tp = movie.GetType();
+            //var someVar = Convert.ChangeType(movie, tp);
+            //var someVar = Activator.CreateInstance(tp);
+            //
+            //someVar = db.Set(tp).Find(id);sd
+            string str = JsonConvert.SerializeObject(movie.Comments.Select(p => new { p.CommentID, p.Context,p.Parent,p.Created,p.Modified,p.Upvote_count,p.User.Name }));         
             return str;
+
+        }
+
+        
+        public string PostComment([Bind(Include = "MovieID,UserID,Context,Parent,Created,Modified")] Comment comment)
+        {
+
+            if (ModelState.IsValid)
+            {
+                db.Comment.Add(comment);
+                db.SaveChanges();
+            }
+            return JsonConvert.SerializeObject(new { comment.CommentID,comment.Context,comment.Parent,comment.Created,comment.Modified});
 
         }
 

@@ -171,6 +171,14 @@
     <Compile Include="Migrations\201810041119329_User_Comment.Designer.cs">
       <DependentUpon>201810041119329_User_Comment.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201810072128359_Update_Comments_Prop.cs" />
+    <Compile Include="Migrations\201810072128359_Update_Comments_Prop.Designer.cs">
+      <DependentUpon>201810072128359_Update_Comments_Prop.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201810072146003_Parent_Nullable.cs" />
+    <Compile Include="Migrations\201810072146003_Parent_Nullable.Designer.cs">
+      <DependentUpon>201810072146003_Parent_Nullable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\Movie.cs" />
@@ -251,6 +259,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201810041119329_User_Comment.resx">
       <DependentUpon>201810041119329_User_Comment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810072128359_Update_Comments_Prop.resx">
+      <DependentUpon>201810072128359_Update_Comments_Prop.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810072146003_Parent_Nullable.resx">
+      <DependentUpon>201810072146003_Parent_Nullable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

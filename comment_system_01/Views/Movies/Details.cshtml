@@ -62,7 +62,12 @@
 
             fieldMappings: {
                 id: 'CommentID',
-                content: 'Context'
+                content: 'Context',
+                parent: 'Parent',
+                upvoteCount: 'Upvote_count',
+                created: 'Created',
+                modified: 'Modified',
+                fullname: 'Name'
             },
             profilePictureURL: 'https://viima-app.s3.amazonaws.com/media/public/defaults/user-icon.png',
             currentUserId: 1,
@@ -71,11 +76,24 @@
             enableAttachments: true,
             enableHashtags: true,
             enablePinging: true,
+            maxRepliesVisible: 3,
 
             getComments: function (success, error) {
                 $.ajax({
                     type: "get",
-                    url: "/Movies/comments/@Model.ID",
+                    url: "/Movies/GetComments/@Model.ID",
+                    success: function (result) {
+                        success(JSON.parse(result))
+                    },
+                    error: error
+                });
+            },
+
+            postComment: function (commentJSON, success, error) {
+                $.ajax({
+                    type: 'post',
+                    url: '/Movies/PostComment?MovieID=@Model.ID&UserID=1',
+                    data: commentJSON,
                     success: function (result) {
                         success(JSON.parse(result))
                     },

@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "comment_system_01", "commen
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{5DBCB4EE-99B0-4F21-8C57-DF6C612900D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "comments_01", "..\comments_01\comments_01\comments_01\comments_01.csproj", "{F097C1C7-1A35-4225-803B-01B8D3D139FB}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,10 +21,6 @@ Global
 		{5DBCB4EE-99B0-4F21-8C57-DF6C612900D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5DBCB4EE-99B0-4F21-8C57-DF6C612900D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5DBCB4EE-99B0-4F21-8C57-DF6C612900D2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F097C1C7-1A35-4225-803B-01B8D3D139FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F097C1C7-1A35-4225-803B-01B8D3D139FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F097C1C7-1A35-4225-803B-01B8D3D139FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F097C1C7-1A35-4225-803B-01B8D3D139FB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
