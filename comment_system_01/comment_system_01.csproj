@@ -179,9 +179,14 @@
     <Compile Include="Migrations\201810072146003_Parent_Nullable.Designer.cs">
       <DependentUpon>201810072146003_Parent_Nullable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201810081137476_Upvote.cs" />
+    <Compile Include="Migrations\201810081137476_Upvote.Designer.cs">
+      <DependentUpon>201810081137476_Upvote.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\Movie.cs" />
+    <Compile Include="Models\Upvote.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -265,6 +270,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201810072146003_Parent_Nullable.resx">
       <DependentUpon>201810072146003_Parent_Nullable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810081137476_Upvote.resx">
+      <DependentUpon>201810081137476_Upvote.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

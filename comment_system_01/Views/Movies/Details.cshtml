@@ -99,6 +99,32 @@
                     },
                     error: error
                 });
+            },
+
+            upvoteComment: function (commentJSON, success, error) {
+                var upvotesURL = '/Movies/UpvoteComment/' + commentJSON.CommentID;
+
+                if (commentJSON.user_has_upvoted) {
+                    $.ajax({
+                        type: 'post',
+                        url: upvotesURL,
+                        success: function (data) {
+                            if (data.success) {
+                                success(commentJSON)
+                            }
+                        },
+                        error: error
+                    });
+                } else {
+                    $.ajax({
+                        type: 'post',
+                        url: upvotesURL,
+                        success: function () {
+                            success(commentJSON)
+                        },
+                        error: error
+                    });
+                }
             }
 
         });

@@ -11,6 +11,7 @@ namespace comment_system_01.Models
         public string Name { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<Upvote> Upvotes { get; set; }
 
     }
 }

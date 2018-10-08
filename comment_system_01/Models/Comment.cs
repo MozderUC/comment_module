@@ -19,6 +19,7 @@ namespace comment_system_01.Models
 
         public virtual Movie Movie { get; set; }
         public virtual User User { get; set; }
+        public virtual ICollection<Upvote> Upvotes { get; set; }
 
     }
 }

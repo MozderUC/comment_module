@@ -19,7 +19,7 @@ namespace comment_system_01.Models
         public string Genre { get; set; }
         public decimal Price { get; set; }
         public string Rating { get; set; }
-        public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }      
     }
 
 }

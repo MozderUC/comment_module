@@ -129,8 +129,35 @@ namespace comment_system_01.Controllers
                 db.SaveChanges();
             }
             return JsonConvert.SerializeObject(new { comment.CommentID,comment.Context,comment.Parent,comment.Created,comment.Modified});
-
+            
         }
+
+        public void UpvoteComment(int? id)
+        {
+            Comment comment = db.Comment.Find(id);
+            User user = db.User.Find(comment.UserID);
+
+            Upvote Upvote = user.Upvotes.Where(item => item.CommentID.Equals(comment.CommentID)).FirstOrDefault();
+
+            if (Upvote==null)
+            {
+                comment.Upvote_count = comment.Upvote_count + 1;
+                db.Entry(comment).State = EntityState.Modified;
+                db.Upvote.Add(new Upvote { CommentID = comment.CommentID, UserID = comment.UserID, Created = DateTime.Now });
+                db.SaveChanges();               
+            }
+            else
+            {
+                comment.Upvote_count = comment.Upvote_count - 1;
+                db.Entry(comment).State = EntityState.Modified;
+                db.Upvote.Remove(Upvote);
+                db.SaveChanges();
+                //db.Upvote.
+
+            }
+                   
+        }
+
 
         // POST: Movies/Delete/5
         [HttpPost, ActionName("Delete")]

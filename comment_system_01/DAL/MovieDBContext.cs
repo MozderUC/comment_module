@@ -14,6 +14,7 @@ namespace comment_system_01.DAL
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Comment> Comment { get; set; }
         public DbSet<User> User { get; set; }
+        public DbSet<Upvote> Upvote { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
