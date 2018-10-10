@@ -67,10 +67,11 @@
                 upvoteCount: 'Upvote_count',
                 created: 'Created',
                 modified: 'Modified',
-                fullname: 'Name'
+                fullname: 'Name',
+                creator: 'UserID',
+                fullname: 'UserName'
             },
-            profilePictureURL: 'https://viima-app.s3.amazonaws.com/media/public/defaults/user-icon.png',
-            currentUserId: 1,
+            profilePictureURL: 'https://viima-app.s3.amazonaws.com/media/public/defaults/user-icon.png',            
             roundProfilePictures: true,
             textareaRows: 1,
             enableAttachments: true,
@@ -92,7 +93,7 @@
             postComment: function (commentJSON, success, error) {
                 $.ajax({
                     type: 'post',
-                    url: '/Movies/PostComment?MovieID=@Model.ID&UserID=1',
+                    url: '/Movies/PostComment?MovieID=@Model.ID',
                     data: commentJSON,
                     success: function (result) {
                         success(JSON.parse(result))
@@ -103,28 +104,14 @@
 
             upvoteComment: function (commentJSON, success, error) {
                 var upvotesURL = '/Movies/UpvoteComment/' + commentJSON.CommentID;
-
-                if (commentJSON.user_has_upvoted) {
                     $.ajax({
                         type: 'post',
                         url: upvotesURL,
-                        success: function (data) {
-                            if (data.success) {
-                                success(commentJSON)
-                            }
+                        success: function () {                          
+                            success(commentJSON)                           
                         },
                         error: error
-                    });
-                } else {
-                    $.ajax({
-                        type: 'post',
-                        url: upvotesURL,
-                        success: function () {
-                            success(commentJSON)
-                        },
-                        error: error
-                    });
-                }
+                    });           
             }
 
         });

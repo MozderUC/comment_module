@@ -1,11 +1,13 @@
 ﻿using comment_system_01.Models;
+using comment_system_01.Models.Account;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 
 
 namespace comment_system_01.DAL
 {
-    public class MovieDBContext : DbContext
+    public class MovieDBContext : IdentityDbContext<ApplicationUser>
     {
         public MovieDBContext() : base("MovieDBContext")
         {
@@ -13,13 +15,15 @@ namespace comment_system_01.DAL
 
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Comment> Comment { get; set; }
-        public DbSet<User> User { get; set; }
         public DbSet<Upvote> Upvote { get; set; }
 
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        public static MovieDBContext Create()
         {
-            modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            return new MovieDBContext();
         }
+
+        
+
 
     }
 }

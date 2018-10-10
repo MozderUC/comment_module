@@ -9,6 +9,9 @@ using System.Web.Mvc;
 using comment_system_01.DAL;
 using comment_system_01.Models;
 using Newtonsoft.Json;
+using Microsoft.AspNet.Identity;
+using comment_system_01.Models.Account;
+
 namespace comment_system_01.Controllers
 {
     public class MoviesController : Controller
@@ -109,41 +112,54 @@ namespace comment_system_01.Controllers
         public string GetComments(int? id)
         {
             Movie movie = db.Movies.Find(id);
+
+            string st1r  = this.User.Identity.GetUserId();
             //Type tp = movie.GetType();
             //var someVar = Convert.ChangeType(movie, tp);
             //var someVar = Activator.CreateInstance(tp);
             //
             //someVar = db.Set(tp).Find(id);sd
-            string str = JsonConvert.SerializeObject(movie.Comments.Select(p => new { p.CommentID, p.Context,p.Parent,p.Created,p.Modified,p.Upvote_count,p.User.Name }));         
-            return str;
-
-        }
-
+            var str = movie.Comments.
+                            Select(p => new
+                            {
+                                p.CommentID,
+                                p.Context,
+                                p.Parent,
+                                p.Created,
+                                p.Modified,
+                                p.Upvote_count,
+                                p.User.UserName,
+                                created_by_current_user = (p.User.Id == this.User.Identity.GetUserId() ? true : false ),
+                                user_has_upvoted = p.Upvotes.Where(u=>u.UserID.Equals(this.User.Identity.GetUserId())).Any(),                          
+                            });         
+            return JsonConvert.SerializeObject(str);
         
-        public string PostComment([Bind(Include = "MovieID,UserID,Context,Parent,Created,Modified")] Comment comment)
+        }
+        
+        
+        public string PostComment([Bind(Include = "MovieID,Context,Parent,Created,Modified")] Comment comment)
         {
-
+        
             if (ModelState.IsValid)
             {
+                comment.UserID = db.Users.Find(this.User.Identity.GetUserId()).Id;
                 db.Comment.Add(comment);
                 db.SaveChanges();
             }
-            return JsonConvert.SerializeObject(new { comment.CommentID,comment.Context,comment.Parent,comment.Created,comment.Modified});
+            return JsonConvert.SerializeObject(new { comment.CommentID,comment.UserID,comment.User.UserName,comment.Context,comment.Parent,comment.Created,comment.Modified});
             
         }
-
+        
         public void UpvoteComment(int? id)
         {
-            Comment comment = db.Comment.Find(id);
-            User user = db.User.Find(comment.UserID);
-
-            Upvote Upvote = user.Upvotes.Where(item => item.CommentID.Equals(comment.CommentID)).FirstOrDefault();
-
+            Comment comment = db.Comment.Find(id);                   
+            Upvote Upvote = comment.Upvotes.Where(item => item.UserID.Equals(this.User.Identity.GetUserId())).FirstOrDefault();
+        
             if (Upvote==null)
             {
                 comment.Upvote_count = comment.Upvote_count + 1;
                 db.Entry(comment).State = EntityState.Modified;
-                db.Upvote.Add(new Upvote { CommentID = comment.CommentID, UserID = comment.UserID, Created = DateTime.Now });
+                db.Upvote.Add(new Upvote { CommentID = comment.CommentID, UserID = this.User.Identity.GetUserId(), Created = DateTime.Now });
                 db.SaveChanges();               
             }
             else
@@ -151,9 +167,7 @@ namespace comment_system_01.Controllers
                 comment.Upvote_count = comment.Upvote_count - 1;
                 db.Entry(comment).State = EntityState.Modified;
                 db.Upvote.Remove(Upvote);
-                db.SaveChanges();
-                //db.Upvote.
-
+                db.SaveChanges();                      
             }
                    
         }

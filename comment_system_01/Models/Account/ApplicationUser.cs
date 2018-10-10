@@ -1,17 +1,18 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace comment_system_01.Models
+namespace comment_system_01.Models.Account
 {
-    public class User
+    public class ApplicationUser : IdentityUser
     {
-        public int UserID { get; set; }
-        public string Name { get; set; }
-
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<Upvote> Upvotes { get; set; }
 
+        public ApplicationUser()
+        {
+        }
     }
 }
