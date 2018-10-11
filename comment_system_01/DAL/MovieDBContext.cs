@@ -16,6 +16,7 @@ namespace comment_system_01.DAL
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Comment> Comment { get; set; }
         public DbSet<Upvote> Upvote { get; set; }
+        public DbSet<Image> Image { get; set; }
 
         public static MovieDBContext Create()
         {

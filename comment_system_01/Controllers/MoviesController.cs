@@ -172,6 +172,29 @@ namespace comment_system_01.Controllers
                    
         }
 
+        [HttpPost]
+        public string UploadAttachments([Bind(Include = "CommentID")]Image image)
+        {
+
+            HttpPostedFileBase file = this.Request.Files[0];
+           
+            image.FileName = file.FileName;
+            image.ImageSize = file.ContentLength;
+
+            byte[] data = new byte[file.ContentLength];
+            file.InputStream.Read(data, 0, file.ContentLength);
+            string imageBase64Data = Convert.ToBase64String(data);
+            string imageDataURL = string.Format("data:image/jpeg;base64,{0}", imageBase64Data);
+
+            image.ImageData = data;
+
+            db.Image.Add(image);
+            //db.SaveChanges();
+
+            return JsonConvert.SerializeObject(new { imageUrl = imageDataURL });
+
+        }
+
 
         // POST: Movies/Delete/5
         [HttpPost, ActionName("Delete")]

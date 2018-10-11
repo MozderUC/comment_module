@@ -419,3 +419,4 @@ D:\asp\comment_module\comment_system_01\bin\Microsoft.Owin.Security.OAuth.xml
 D:\asp\comment_module\comment_system_01\obj\Debug\comment_system_01.csprojAssemblyReference.cache
 D:\asp\comment_module\comment_system_01\obj\Debug\comment_system_01.Migrations.aha.resources
 D:\asp\comment_module\comment_system_01\obj\Debug\comment_system_01.Migrations.RenameUser.resources
+D:\asp\comment_module\comment_system_01\obj\Debug\comment_system_01.Migrations.addImage.resources

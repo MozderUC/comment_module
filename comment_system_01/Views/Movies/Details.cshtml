@@ -112,6 +112,53 @@
                         },
                         error: error
                     });           
+            },
+            uploadAttachments: function (commentArray, success, error) {
+                var responses = 0;
+                var successfulUploads = [];
+
+                var serverResponded = function () {
+                    responses++;
+
+                    // Check if all requests have finished
+                    if (responses == commentArray.length) {
+
+                        // Case: all failed
+                        if (successfulUploads.length == 0) {
+                            error();
+
+                            // Case: some succeeded
+                        } else {
+                            success(successfulUploads)
+                        }
+                    }
+                }
+
+                $(commentArray).each(function (index, commentJSON) {
+
+                    // Create form data
+                    var formData = new FormData();
+                    $(Object.keys(commentJSON)).each(function (index, key) {
+                        var value = commentJSON[key];
+                        if (value) formData.append(key, value);
+                    });
+
+                    $.ajax({
+                        url: '/Movies/UploadAttachments/',
+                        type: 'POST',
+                        data: formData,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function (commentJSON) {
+                            successfulUploads.push(commentJSON);
+                            serverResponded();
+                        },
+                        error: function (data) {
+                            serverResponded();
+                        },
+                    });
+                });
             }
 
         });

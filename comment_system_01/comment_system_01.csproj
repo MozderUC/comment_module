@@ -220,12 +220,17 @@
     <Compile Include="Migrations\201810100626430_RenameUser.Designer.cs">
       <DependentUpon>201810100626430_RenameUser.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201810102112203_addImage.cs" />
+    <Compile Include="Migrations\201810102112203_addImage.Designer.cs">
+      <DependentUpon>201810102112203_addImage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account\ApplicationUser.cs" />
     <Compile Include="Models\Account\ApplicationUserManager.cs" />
     <Compile Include="Models\Account\LoginModel.cs" />
     <Compile Include="Models\Account\RegisterModel.cs" />
     <Compile Include="Models\Comment.cs" />
+    <Compile Include="Models\Image.cs" />
     <Compile Include="Models\Movie.cs" />
     <Compile Include="Models\Upvote.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -321,6 +326,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201810100626430_RenameUser.resx">
       <DependentUpon>201810100626430_RenameUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810102112203_addImage.resx">
+      <DependentUpon>201810102112203_addImage.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
