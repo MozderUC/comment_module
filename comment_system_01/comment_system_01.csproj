@@ -224,6 +224,14 @@
     <Compile Include="Migrations\201810102112203_addImage.Designer.cs">
       <DependentUpon>201810102112203_addImage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201810110859234_nulladleCommentId.cs" />
+    <Compile Include="Migrations\201810110859234_nulladleCommentId.Designer.cs">
+      <DependentUpon>201810110859234_nulladleCommentId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201810111145257_imageUrl.cs" />
+    <Compile Include="Migrations\201810111145257_imageUrl.Designer.cs">
+      <DependentUpon>201810111145257_imageUrl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account\ApplicationUser.cs" />
     <Compile Include="Models\Account\ApplicationUserManager.cs" />
@@ -231,6 +239,7 @@
     <Compile Include="Models\Account\RegisterModel.cs" />
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\Image.cs" />
+    <Compile Include="Models\ImageUrl.cs" />
     <Compile Include="Models\Movie.cs" />
     <Compile Include="Models\Upvote.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -287,7 +296,8 @@
     <Content Include="Views\Account\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
+    <Folder Include="App_Data\images\" />
+    <Folder Include="images\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -329,6 +339,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201810102112203_addImage.resx">
       <DependentUpon>201810102112203_addImage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810110859234_nulladleCommentId.resx">
+      <DependentUpon>201810110859234_nulladleCommentId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810111145257_imageUrl.resx">
+      <DependentUpon>201810111145257_imageUrl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

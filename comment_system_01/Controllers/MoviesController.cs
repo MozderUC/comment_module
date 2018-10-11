@@ -11,6 +11,7 @@ using comment_system_01.Models;
 using Newtonsoft.Json;
 using Microsoft.AspNet.Identity;
 using comment_system_01.Models.Account;
+using System.IO;
 
 namespace comment_system_01.Controllers
 {
@@ -108,17 +109,18 @@ namespace comment_system_01.Controllers
             return View(movie);
         }
 
-        
+
         public string GetComments(int? id)
         {
             Movie movie = db.Movies.Find(id);
-
-            string st1r  = this.User.Identity.GetUserId();
+        
+            string st1r = this.User.Identity.GetUserId();
             //Type tp = movie.GetType();
             //var someVar = Convert.ChangeType(movie, tp);
             //var someVar = Activator.CreateInstance(tp);
             //
             //someVar = db.Set(tp).Find(id);sd
+        
             var str = movie.Comments.
                             Select(p => new
                             {
@@ -129,27 +131,33 @@ namespace comment_system_01.Controllers
                                 p.Modified,
                                 p.Upvote_count,
                                 p.User.UserName,
-                                created_by_current_user = (p.User.Id == this.User.Identity.GetUserId() ? true : false ),
-                                user_has_upvoted = p.Upvotes.Where(u=>u.UserID.Equals(this.User.Identity.GetUserId())).Any(),                          
-                            });         
+                                created_by_current_user = (p.User.Id == this.User.Identity.GetUserId() ? true : false),
+                                user_has_upvoted = p.Upvotes.Where(u => u.UserID.Equals(this.User.Identity.GetUserId())).Any()                               
+                            });
             return JsonConvert.SerializeObject(str);
         
         }
-        
-        
+
+       
+
         public string PostComment([Bind(Include = "MovieID,Context,Parent,Created,Modified")] Comment comment)
         {
-        
-            if (ModelState.IsValid)
+            if(this.User.Identity.IsAuthenticated)
             {
-                comment.UserID = db.Users.Find(this.User.Identity.GetUserId()).Id;
-                db.Comment.Add(comment);
-                db.SaveChanges();
+                if (ModelState.IsValid)
+                {
+                    comment.UserID = db.Users.Find(this.User.Identity.GetUserId()).Id;
+                    db.Comment.Add(comment);
+                    db.SaveChanges();
+                }
+                return JsonConvert.SerializeObject(new { comment.CommentID, comment.UserID, comment.User.UserName, comment.Context, comment.Parent, comment.Created, comment.Modified, success = true });
             }
-            return JsonConvert.SerializeObject(new { comment.CommentID,comment.UserID,comment.User.UserName,comment.Context,comment.Parent,comment.Created,comment.Modified});
+            return JsonConvert.SerializeObject(new { success = false});
+            
             
         }
         
+        [Authorize]
         public void UpvoteComment(int? id)
         {
             Comment comment = db.Comment.Find(id);                   
@@ -173,26 +181,41 @@ namespace comment_system_01.Controllers
         }
 
         [HttpPost]
-        public string UploadAttachments([Bind(Include = "CommentID")]Image image)
+        public string UploadAttachments(Image image)
         {
 
             HttpPostedFileBase file = this.Request.Files[0];
-           
-            image.FileName = file.FileName;
-            image.ImageSize = file.ContentLength;
+         
 
-            byte[] data = new byte[file.ContentLength];
-            file.InputStream.Read(data, 0, file.ContentLength);
-            string imageBase64Data = Convert.ToBase64String(data);
-            string imageDataURL = string.Format("data:image/jpeg;base64,{0}", imageBase64Data);
+            if (file != null && file.ContentLength > 0)
+            {
+                string fname = Path.GetFileName(file.FileName);
+                file.SaveAs(Server.MapPath(Path.Combine("~/App_Data/images", fname)));
 
-            image.ImageData = data;
+                image.FileName = file.FileName;
+                image.ImageSize = file.ContentLength;
 
-            db.Image.Add(image);
-            //db.SaveChanges();
+                byte[] data = new byte[file.ContentLength];
+                file.InputStream.Read(data, 0, file.ContentLength);
+                //string imageBase64Data = Convert.ToBase64String(data);
+                //string imageDataURL = string.Format("data:image/jpeg;base64,{0}", imageBase64Data);
 
-            return JsonConvert.SerializeObject(new { imageUrl = imageDataURL });
+                image.ImageData = data;
 
+                ImageUrl imageUrl = new ImageUrl();
+                imageUrl.imageUrl = Path.Combine(Request.ApplicationPath, "/images/", fname);
+
+                image.ImageUrl = imageUrl;
+
+                db.Image.Add(image);
+                db.SaveChanges();
+                //Path.Combine(Request.ApplicationPath, "/images/Kolkata-in-pictures.jpg")
+                //return JsonConvert.SerializeObject(new { imageUrl = (Path.Combine("~/App_Data/images", Path.GetFileName(file.FileName))) });
+                return JsonConvert.SerializeObject(new { fileUrl = Path.Combine(Request.ApplicationPath, "/images/Kolkata-in-pictures.jpg") });
+
+            }
+            return "Hellow";
+          
         }
 
 

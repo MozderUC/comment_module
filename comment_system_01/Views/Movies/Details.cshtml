@@ -75,8 +75,6 @@
             roundProfilePictures: true,
             textareaRows: 1,
             enableAttachments: true,
-            enableHashtags: true,
-            enablePinging: true,
             maxRepliesVisible: 3,
 
             getComments: function (success, error) {
@@ -96,7 +94,13 @@
                     url: '/Movies/PostComment?MovieID=@Model.ID',
                     data: commentJSON,
                     success: function (result) {
-                        success(JSON.parse(result))
+                        var json = JSON.parse(result)
+                        if (json['success']) {
+                            success(json)
+                        }
+                        else {
+                            alert("Please Login");
+                        }
                     },
                     error: error
                 });
@@ -151,7 +155,7 @@
                         contentType: false,
                         processData: false,
                         success: function (commentJSON) {
-                            successfulUploads.push(commentJSON);
+                            successfulUploads.push(JSON.parse(commentJSON));
                             serverResponded();
                         },
                         error: function (data) {
