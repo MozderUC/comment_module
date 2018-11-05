@@ -1,0 +1,171 @@
+﻿@model comment_system_01.Models.Movie
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+@using Newtonsoft.Json;
+<div>
+    <h4>Movie</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ReleaseDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ReleaseDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Genre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Genre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+
+<script type="text/javascript">
+    function decodeHtml(html) {
+        var txt = document.createElement("textarea");
+        txt.innerHTML = html;
+        return txt.value;
+    }
+
+    $(function () {
+
+        $('#comments-container').comments({
+
+            fieldMappings: {
+                id: 'CommentID',
+                content: 'Context',
+                parent: 'Parent',
+                upvoteCount: 'Upvote_count',
+                created: 'Created',
+                modified: 'Modified',
+                fullname: 'Name',
+                creator: 'UserID',
+                fullname: 'UserName'
+            },
+            profilePictureURL: 'https://viima-app.s3.amazonaws.com/media/public/defaults/user-icon.png',            
+            roundProfilePictures: true,
+            textareaRows: 1,
+            enableAttachments: true,
+            maxRepliesVisible: 3,
+
+            getComments: function (success, error) {
+                $.ajax({
+                    type: "get",
+                    url: "/Movies/GetComments/@Model.ID",
+                    success: function (result) {
+                        success(JSON.parse(result))
+                    },
+                    error: error
+                });
+            },
+
+            postComment: function (commentJSON, success, error) {
+                $.ajax({
+                    type: 'post',
+                    url: '/Movies/PostComment?MovieID=@Model.ID',
+                    data: commentJSON,
+                    success: function (result) {
+                        var json = JSON.parse(result)
+                        if (json['success']) {
+                            success(json)
+                        }
+                        else {
+                            alert("Please Login");
+                        }
+                    },
+                    error: error
+                });
+            },
+
+            upvoteComment: function (commentJSON, success, error) {
+                var upvotesURL = '/Movies/UpvoteComment/' + commentJSON.CommentID;
+                    $.ajax({
+                        type: 'post',
+                        url: upvotesURL,
+                        success: function () {                          
+                            success(commentJSON)                           
+                        },
+                        error: error
+                    });           
+            },
+            uploadAttachments: function (commentArray, success, error) {
+                var responses = 0;
+                var successfulUploads = [];
+
+                var serverResponded = function () {
+                    responses++;
+
+                    // Check if all requests have finished
+                    if (responses == commentArray.length) {
+
+                        // Case: all failed
+                        if (successfulUploads.length == 0) {
+                            error();
+
+                            // Case: some succeeded
+                        } else {
+                            success(successfulUploads)
+                        }
+                    }
+                }
+
+                $(commentArray).each(function (index, commentJSON) {
+
+                    // Create form data
+                    var formData = new FormData();
+                    $(Object.keys(commentJSON)).each(function (index, key) {
+                        var value = commentJSON[key];
+                        if (value) formData.append(key, value);
+                    });
+
+                    $.ajax({
+                        url: '/Movies/UploadAttachments/',
+                        type: 'POST',
+                        data: formData,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function (commentJSON) {
+                            successfulUploads.push(JSON.parse(commentJSON));
+                            serverResponded();
+                        },
+                        error: function (data) {
+                            serverResponded();
+                        },
+                    });
+                });
+            }
+
+        });
+    });
+</script>
+<div id="comments-container"></div>
