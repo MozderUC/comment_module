@@ -133,7 +133,7 @@ namespace comment_system_01.Controllers
                                 p.User.UserName,
                                 created_by_current_user = (p.User.Id == this.User.Identity.GetUserId() ? true : false),
                                 user_has_upvoted = p.Upvotes.Where(u => u.UserID.Equals(this.User.Identity.GetUserId())).Any()                               
-                            });
+                            });           
             return JsonConvert.SerializeObject(str);
         
         }
@@ -191,30 +191,30 @@ namespace comment_system_01.Controllers
             {
                 string fname = Path.GetFileName(file.FileName);
                 file.SaveAs(Server.MapPath(Path.Combine("~/App_Data/images", fname)));
-
+            
                 image.FileName = file.FileName;
                 image.ImageSize = file.ContentLength;
-
+            
                 byte[] data = new byte[file.ContentLength];
                 file.InputStream.Read(data, 0, file.ContentLength);
-                //string imageBase64Data = Convert.ToBase64String(data);
-                //string imageDataURL = string.Format("data:image/jpeg;base64,{0}", imageBase64Data);
-
-                image.ImageData = data;
-
-                ImageUrl imageUrl = new ImageUrl();
-                imageUrl.imageUrl = Path.Combine(Request.ApplicationPath, "/images/", fname);
-
-                image.ImageUrl = imageUrl;
-
-                db.Image.Add(image);
-                db.SaveChanges();
+                string imageBase64Data = Convert.ToBase64String(data);
+                string imageDataURL = string.Format("data:image/jpeg;base64,{0}", imageBase64Data);
+            
+                //image.ImageData = data;
+                //
+                //ImageUrl imageUrl = new ImageUrl();
+                //imageUrl.imageUrl = Path.Combine(Request.ApplicationPath, "/images/", fname);
+                //
+                //image.ImageUrl = imageUrl;
+                //
+                //db.Image.Add(image);
+                //db.SaveChanges();
                 //Path.Combine(Request.ApplicationPath, "/images/Kolkata-in-pictures.jpg")
                 //return JsonConvert.SerializeObject(new { imageUrl = (Path.Combine("~/App_Data/images", Path.GetFileName(file.FileName))) });
-                return JsonConvert.SerializeObject(new { fileUrl = Path.Combine(Request.ApplicationPath, "/images/Kolkata-in-pictures.jpg") });
-
+                return JsonConvert.SerializeObject(new { file_url = imageDataURL, file_mime_type = "image/png" });
+            
             }
-            return "Hellow";
+            return JsonConvert.SerializeObject(new { file_url = "http://www.w3schools.com/html/mov_bbb.mp4", file_mime_type = "video/mp4" });
           
         }
 
